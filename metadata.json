@@ -1,0 +1,11 @@
+{
+    "id": "bandcamp",
+    "name": "Bandcamp",
+    "maintainer_name": "Jiří Janoušek",
+    "maintainer_link": "https://github.com/fenryxo",
+    "version_major": 2,
+    "version_minor": 0,
+    "api_major": 3,
+    "api_minor": 0,
+    "categories": "AudioVideo;Audio;"
+}
