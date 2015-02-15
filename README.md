@@ -1,5 +1,3 @@
-*This web app integration script is only a template. It doesn't work.*
-
 Bandcamp for Nuvola Player 3
 ============================
 
@@ -21,5 +19,5 @@ Installation
 Copyright
 ---------
 
-  - Copyright 2014 Jiří Janoušek <janousek.jiri@gmail.com>
+  - Copyright 2014-2015 Jiří Janoušek <janousek.jiri@gmail.com>
   - License: [2-Clause BSD-license](./LICENSE)
