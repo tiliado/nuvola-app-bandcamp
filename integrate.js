@@ -263,6 +263,15 @@ WebApp._onActionActivated = function(emitter, name, param)
     }
 }
 
+WebApp._onNavigationRequest = function(emitter, request)
+{
+    Nuvola.WebApp._onNavigationRequest(emitter, request)
+    
+    // Don't open album from collections in a new window    
+    if (request.approved)
+	request.newWindow = false;
+}
+
 WebApp.start();
 
 })(this);  // function(Nuvola)
