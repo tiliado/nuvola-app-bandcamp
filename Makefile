@@ -30,6 +30,8 @@ help:
 	@echo "make install DEST=/path  - install to '/path' directory"
 	@echo "make uninstall           - uninstall from user's local directory (~/.local)"
 
+build:
+
 install: LICENSE metadata.json integrate.js
 	install -vCd $(DEST)/$(APP_ID)
 	install -vC $^ $(DEST)/$(APP_ID)
