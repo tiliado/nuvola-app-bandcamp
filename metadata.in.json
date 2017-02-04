@@ -1,0 +1,21 @@
+{
+    "id": "bandcamp", 
+    "name": "Bandcamp", 
+    "home_url": "http://bandcamp.com", 
+    "allowed_uri": "https?://(.*bandcamp\\.com|(\\w+\\.)*\\w+\\.\\w+/(album|track)/)", 
+    "maintainer_name": "Jiří Janoušek", 
+    "maintainer_link": "https://github.com/fenryxo", 
+    "version_major": 2, 
+    "version_minor": 1, 
+    "api_major": 3, 
+    "api_minor": 0, 
+    "categories": "AudioVideo;Audio;", 
+    "license": "2-Clause BSD-license", 
+    "build": {
+        "icons": [
+            "src/icon.svg SCALABLE 64 128 256", 
+            "src/icon-xs.svg 16 22 24", 
+            "src/icon-sm.svg 32 48"
+        ]
+    }
+}
