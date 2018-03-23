@@ -60,6 +60,7 @@
 
 // Extract data from the web page
   WebApp.update = function () {
+    var prevSection = this.section
     var SECTION_WEEKLY = 1
     var SECTION_DISCOVER = 2
     var SECTION_ALBUM_VIEW = 3
@@ -81,7 +82,7 @@
     var weekly = !!document.querySelector('#bcweekly')
     var weeklyState = PlaybackState.UNKNOWN
     if (weekly) {
-      var weeklyPlaying = !!document.querySelector('#bcweekly.playing')
+      var weeklyPlaying = !!document.querySelector('#bcweekly-inner.playing')
       var weeklyPlayButton = document.querySelector('#bcweekly .play-btn .icon')
       weeklyState = weeklyPlaying ? PlaybackState.PLAYING : (
       weeklyPlayButton ? PlaybackState.PAUSED : PlaybackState.UNKNOWN)
@@ -93,11 +94,11 @@
     }
 
     // Try to find Discover section in the middle of the home page
-    var discover = !!document.querySelector('#discover_detail')
+    var discover = !!document.querySelector('.discover-detail')
     var discoverState = PlaybackState.UNKNOWN
     if (discover) {
-      var discoverPlayButton = document.querySelector('#discover_detail .playbutton')
-      var discoverPlayButtonPlaying = !!document.querySelector('#discover_detail .playbutton.playing')
+      var discoverPlayButton = document.querySelector('.discover-detail .playbutton')
+      var discoverPlayButtonPlaying = !!document.querySelector('.discover-detail .playbutton.playing')
 
       if (!discoverPlayButton) {
         discoverState = PlaybackState.UNKNOWN
@@ -124,61 +125,38 @@
       }
     }
 
-    // ~ Nuvola.log("Section {1}; weekly {2}; discover {3} ", this.section, weekly, discover);
-
-    // Bandcamp Weekly section at the top of the home page
-    if (this.section === SECTION_WEEKLY) {
-      var elm = document.querySelector('.bcweekly-track-item-large .track-name')
-      if (elm) { track.title = elm.innerText }
-
-      elm = document.querySelector('.bcweekly-track-item-large .album-name')
-      if (elm) { track.album = elm.innerText }
-
-      elm = document.querySelector('.bcweekly-track-item-large .artist-name')
-      if (elm) {
-        track.artist = elm.innerText
-        if (track.artist.substring(0, 3) === 'by ') { track.artist = track.artist.substring(3) }
-      }
-
-      elm = document.querySelector('.bcweekly-track-item-large .popupImage img')
-      if (elm) { track.artLocation = elm.src }
-
+    var elm
+    if (this.section === SECTION_WEEKLY) { // Bandcamp Weekly section at the top of the home page
+      track.title = (Nuvola.queryText('.bcweekly-current .track-large .track-title') ||
+        Nuvola.queryText('.bcweekly-player .bcweekly-title'))
+      track.album = Nuvola.queryText('.bcweekly-current .track-large .track-album')
+      track.artist = Nuvola.queryText('.bcweekly-current .track-large .track-artist a')
+      track.artLocation = Nuvola.queryAttribute('.bcweekly-current .track-large  .popupImage img', 'src')
       playButton = weeklyPlayButton
       state = weeklyState
     } else if (this.section === SECTION_DISCOVER) { // Discover section in the middle of the home page
-      elm = document.querySelector('#discover_detail .track_info .title-section .title')
-      if (elm) { track.title = elm.innerText }
-      elm = document.querySelector('#discover_detail .itemtext a')
-      if (elm) { track.album = elm.innerText }
-      elm = document.querySelector('#discover_detail .itemsubtext a.detail_item_link_2')
-      if (elm) { track.artist = elm.innerText }
-      elm = document.querySelector('#discover img.detail_art')
-      if (elm) { track.artLocation = elm.src }
-
+      track.title = Nuvola.queryText('.discover-detail .track_info .title-section .title')
+      track.album = Nuvola.queryText('.discover-detail .detail-album a')
+      track.artist = Nuvola.queryText('.discover-detail .detail-artist a')
+      track.artLocation = Nuvola.queryAttribute('.discover-detail .detail_art img', 'src')
       state = discoverState
       playButton = discoverPlayButton
     } else if (this.section === SECTION_ALBUM_VIEW) { // Album view
-      elm = document.querySelector('.trackView .track_info .title')
-      if (elm) { track.title = elm.innerText }
-      elm = document.querySelector('.trackView .trackTitle')
-      if (elm) { track.album = elm.innerText }
-      elm = document.querySelector('.trackView span[itemprop=byArtist]')
-      if (elm) { track.artist = elm.innerText }
-      elm = document.querySelector('.trackView img.popupImage') || document.querySelector('a.popupImage img')
-      if (elm) { track.artLocation = elm.src }
+      track.title = Nuvola.queryText('.trackView .track_info .title')
+      track.album = Nuvola.queryText('.trackView .trackTitle')
+      track.artist = Nuvola.queryText('.trackView span[itemprop=byArtist]')
+      track.artLocation = (Nuvola.queryAttribute('.trackView img.popupImage', 'src') ||
+        Nuvola.queryAttribute('a.popupImage img', 'src'))
       state = albumViewState
       playButton = albumViewPlayButton
       canNext = (elm = document.querySelector('#trackInfo .nextbutton')) && !elm.classList.contains('hiddenelem')
       canPrev = (elm = document.querySelector('#trackInfo .prevbutton')) && !elm.classList.contains('hiddenelem')
     } else if (this.section === SECTION_TRACK_VIEW) {
-      elm = document.querySelector('.trackView h2.trackTitle')
-      if (elm) { track.title = elm.innerText }
-      elm = document.querySelector('.trackView .albumTitle span[itemprop=name]')
-      if (elm) { track.album = elm.innerText }
-      elm = document.querySelector('.trackView span[itemprop=byArtist]')
-      if (elm) { track.artist = elm.innerText }
-      elm = document.querySelector('.trackView img.popupImage') || document.querySelector('a.popupImage img')
-      if (elm) { track.artLocation = elm.src }
+      track.title = Nuvola.queryText('.trackView h2.trackTitle')
+      track.album = Nuvola.queryText('.trackView .albumTitle span[itemprop=name]')
+      track.artist = Nuvola.queryText('.trackView span[itemprop=byArtist]')
+      track.artLocation = (Nuvola.queryAttribute('.trackView img.popupImage', 'src') ||
+        Nuvola.queryAttribute('a.popupImage img', 'src'))
       state = albumViewState
       playButton = albumViewPlayButton
       canNext = (elm = document.querySelector('#trackInfo .nextbutton')) && !elm.classList.contains('hiddenelem')
@@ -195,6 +173,9 @@
     player.setCanPlay(state === PlaybackState.PAUSED)
     player.setCanPause(state === PlaybackState.PLAYING)
 
+    if (prevSection !== this.section) {
+      console.log('Section ' + prevSection + ' → ' + this.section)
+    }
     // Schedule the next update
     setTimeout(this.update.bind(this), 500)
   }
@@ -223,7 +204,6 @@
 
   WebApp._onNavigationRequest = function (emitter, request) {
     Nuvola.WebApp._onNavigationRequest(emitter, request)
-
     // Don't open album from collections in a new window
     if (request.approved) { request.newWindow = false }
   }
