@@ -1,5 +1,5 @@
-Bandcamp (Nuvola app)
-=====================
+Bandcamp • Nuvola Apps Runtime
+==============================
 
 Integration of Bandcamp into your linux desktop via
 [Nuvola Apps Runtime](https://github.com/tiliado/nuvolaruntime).

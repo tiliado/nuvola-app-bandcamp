@@ -163,10 +163,14 @@
       canPrev = (elm = document.querySelector('#trackInfo .prevbutton')) && !elm.classList.contains('hiddenelem')
     }
 
+    var timeElapsed = Nuvola.queryText('#trackInfo .time .time_elapsed')
+    track.length = timeElapsed ? Nuvola.queryText('#trackInfo .time .time_total') : null
+
     // Save state
     this.state = state
     this.playButton = playButton
     player.setTrack(track)
+    player.setTrackPosition(timeElapsed)
     player.setPlaybackState(state)
     player.setCanGoPrev(canPrev)
     player.setCanGoNext(canNext)
