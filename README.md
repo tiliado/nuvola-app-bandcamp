@@ -9,7 +9,6 @@ Support
 
 Follow [Bug reporting guidelines](https://github.com/tiliado/nuvolaruntime/wiki/Bug-Reporting-Guidelines).
 
-
 Installation
 ------------
 
@@ -21,6 +20,16 @@ Building
 This project uses [Nuvola SDK](https://github.com/tiliado/nuvolasdk#create-new-project). Please refer to
 the [Build a Project Using Nuvola SDK](https://github.com/tiliado/nuvolasdk#build-a-project-using-nuvola-sdk)
 page in order to obtain information about dependencies and installation instructions.
+
+Change log
+----------
+
+See [CHANGELOG.md](./CHANGELOG.md).
+
+Contributing
+------------
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 Copyright
 ---------
