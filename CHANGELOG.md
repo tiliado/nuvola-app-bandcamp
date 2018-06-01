@@ -1,6 +1,9 @@
 Changelog
 =========
 
+2.3 - June 1st, 2018
+--------------------
+
  * Ported to Chromium backend and adjusted metadata extraction.
  * Track position and length is integrated.
 
