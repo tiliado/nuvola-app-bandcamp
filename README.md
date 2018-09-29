@@ -1,4 +1,4 @@
-Bandcamp • Nuvola Apps Runtime
+Bandcamp • Nuvola Apps Runtime [![CircleCI](https://circleci.com/gh/tiliado/nuvola-app-bandcamp/tree/master.svg?style=svg)](https://circleci.com/gh/tiliado/nuvola-app-bandcamp/tree/master)
 ==============================
 
 Integration of Bandcamp into your linux desktop via
