@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2018 Jiří Janoušek <janousek.jiri@gmail.com>
+ * Copyright 2014-2020 Jiří Janoušek <janousek.jiri@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -26,20 +26,20 @@
 
 (function (Nuvola) {
   // Create media player component
-  var player = Nuvola.$object(Nuvola.MediaPlayer)
+  const player = Nuvola.$object(Nuvola.MediaPlayer)
 
   // Handy aliases
-  var PlaybackState = Nuvola.PlaybackState
-  var PlayerAction = Nuvola.PlayerAction
+  const PlaybackState = Nuvola.PlaybackState
+  const PlayerAction = Nuvola.PlayerAction
 
   // Create new WebApp prototype
-  var WebApp = Nuvola.$WebApp()
+  const WebApp = Nuvola.$WebApp()
 
   // Initialization routines
   WebApp._onInitWebWorker = function (emitter) {
     Nuvola.WebApp._onInitWebWorker.call(this, emitter)
 
-    var state = document.readyState
+    const state = document.readyState
     if (state === 'interactive' || state === 'complete') {
       this._onPageReady()
     } else {
@@ -58,20 +58,20 @@
     this.update()
   }
 
-// Extract data from the web page
+  // Extract data from the web page
   WebApp.update = function () {
-    var prevSection = this.section
-    var SECTION_WEEKLY = 1
-    var SECTION_DISCOVER = 2
-    var SECTION_ALBUM_VIEW = 3
-    var SECTION_TRACK_VIEW = 4
+    const prevSection = this.section
+    const SECTION_WEEKLY = 1
+    const SECTION_DISCOVER = 2
+    const SECTION_ALBUM_VIEW = 3
+    const SECTION_TRACK_VIEW = 4
 
-    var state = PlaybackState.UNKNOWN
-    var playButton = null
-    var canPrev = false
-    var canNext = false
+    let state = PlaybackState.UNKNOWN
+    let playButton = null
+    let canPrev = false
+    let canNext = false
 
-    var track = {
+    const track = {
       title: null,
       artist: null,
       album: null,
@@ -79,26 +79,27 @@
     }
 
     // Try to find Bandcamp Weekly section at the top of the home page
-    var weekly = !!document.querySelector('#bcweekly')
-    var weeklyState = PlaybackState.UNKNOWN
+    const weekly = !!document.querySelector('#bcweekly')
+    let weeklyState = PlaybackState.UNKNOWN
+    let weeklyPlayButton
     if (weekly) {
-      var weeklyPlaying = !!document.querySelector('#bcweekly-inner.playing')
-      var weeklyPlayButton = document.querySelector('#bcweekly .play-btn .icon')
-      weeklyState = weeklyPlaying ? PlaybackState.PLAYING : (
-      weeklyPlayButton ? PlaybackState.PAUSED : PlaybackState.UNKNOWN)
+      const weeklyPlaying = !!document.querySelector('#bcweekly-inner.playing')
+      weeklyPlayButton = document.querySelector('#bcweekly .play-btn .icon')
+      weeklyState = weeklyPlaying ? PlaybackState.PLAYING : (weeklyPlayButton ? PlaybackState.PAUSED : PlaybackState.UNKNOWN)
 
-  /* If the Weekly section exists, make it a default section,
+      /* If the Weekly section exists, make it a default section,
    * so user can use play action to start music playback immediately.
    */
       if (weeklyPlaying || this.section === null) { this.section = SECTION_WEEKLY }
     }
 
     // Try to find Discover section in the middle of the home page
-    var discover = !!document.querySelector('.discover-detail')
-    var discoverState = PlaybackState.UNKNOWN
+    const discover = !!document.querySelector('.discover-detail')
+    let discoverState = PlaybackState.UNKNOWN
+    let discoverPlayButton
     if (discover) {
-      var discoverPlayButton = document.querySelector('.discover-detail .playbutton')
-      var discoverPlayButtonPlaying = !!document.querySelector('.discover-detail .playbutton.playing')
+      discoverPlayButton = document.querySelector('.discover-detail .playbutton')
+      const discoverPlayButtonPlaying = !!document.querySelector('.discover-detail .playbutton.playing')
 
       if (!discoverPlayButton) {
         discoverState = PlaybackState.UNKNOWN
@@ -112,12 +113,12 @@
     }
 
     // Check whether we are in album view
-    var albumViewState = PlaybackState.UNKNOWN
+    let albumViewState = PlaybackState.UNKNOWN
+    let albumViewPlayButton
     if (!weekly && !discover) {
-      var albumViewPlayButton = document.querySelector('#trackInfo .playbutton')
-      var albumViewPlaying = !!document.querySelector('#trackInfo .playbutton.playing')
-      albumViewState = albumViewPlaying ? PlaybackState.PLAYING : (
-      albumViewPlayButton ? PlaybackState.PAUSED : PlaybackState.UNKNOWN)
+      albumViewPlayButton = document.querySelector('#trackInfo .playbutton')
+      const albumViewPlaying = !!document.querySelector('#trackInfo .playbutton.playing')
+      albumViewState = albumViewPlaying ? PlaybackState.PLAYING : (albumViewPlayButton ? PlaybackState.PAUSED : PlaybackState.UNKNOWN)
       if (albumViewPlayButton && !!document.querySelector('.trackView[itemtype="http://schema.org/MusicAlbum"]')) {
         this.section = SECTION_ALBUM_VIEW
       } else if (albumViewPlayButton && !!document.querySelector('.trackView[itemtype="http://schema.org/MusicRecording"]')) {
@@ -125,7 +126,7 @@
       }
     }
 
-    var elm
+    let elm
     if (this.section === SECTION_WEEKLY) { // Bandcamp Weekly section at the top of the home page
       track.title = (Nuvola.queryText('.bcweekly-current .track-large .track-title') ||
         Nuvola.queryText('.bcweekly-player .bcweekly-title'))
@@ -163,7 +164,7 @@
       canPrev = (elm = document.querySelector('#trackInfo .prevbutton')) && !elm.classList.contains('hiddenelem')
     }
 
-    var timeElapsed = Nuvola.queryText('#trackInfo .time .time_elapsed')
+    const timeElapsed = Nuvola.queryText('#trackInfo .time .time_elapsed')
     track.length = timeElapsed ? Nuvola.queryText('#trackInfo .time .time_total') : null
 
     // Save state
@@ -184,7 +185,7 @@
     setTimeout(this.update.bind(this), 500)
   }
 
-// Handler of playback actions
+  // Handler of playback actions
   WebApp._onActionActivated = function (emitter, name, param) {
     switch (name) {
       case PlayerAction.TOGGLE_PLAY:
@@ -213,4 +214,4 @@
   }
 
   WebApp.start()
-})(this)  // function(Nuvola)
+})(this) // function(Nuvola)
