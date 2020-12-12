@@ -119,10 +119,8 @@
       albumViewPlayButton = document.querySelector('#trackInfo .playbutton')
       const albumViewPlaying = !!document.querySelector('#trackInfo .playbutton.playing')
       albumViewState = albumViewPlaying ? PlaybackState.PLAYING : (albumViewPlayButton ? PlaybackState.PAUSED : PlaybackState.UNKNOWN)
-      if (albumViewPlayButton && !!document.querySelector('.trackView[itemtype="http://schema.org/MusicAlbum"]')) {
-        this.section = SECTION_ALBUM_VIEW
-      } else if (albumViewPlayButton && !!document.querySelector('.trackView[itemtype="http://schema.org/MusicRecording"]')) {
-        this.section = SECTION_TRACK_VIEW
+      if (albumViewPlayButton) {
+        this.section = document.querySelector('#name-section h3.albumTitle') ? SECTION_TRACK_VIEW : SECTION_ALBUM_VIEW
       }
     }
 
@@ -145,7 +143,7 @@
     } else if (this.section === SECTION_ALBUM_VIEW) { // Album view
       track.title = Nuvola.queryText('.trackView .track_info .title')
       track.album = Nuvola.queryText('.trackView .trackTitle')
-      track.artist = Nuvola.queryText('.trackView span[itemprop=byArtist]')
+      track.artist = Nuvola.queryText('.trackView #name-section h3 span')
       track.artLocation = (Nuvola.queryAttribute('.trackView img.popupImage', 'src') ||
         Nuvola.queryAttribute('a.popupImage img', 'src'))
       state = albumViewState
@@ -154,8 +152,8 @@
       canPrev = (elm = document.querySelector('#trackInfo .prevbutton')) && !elm.classList.contains('hiddenelem')
     } else if (this.section === SECTION_TRACK_VIEW) {
       track.title = Nuvola.queryText('.trackView h2.trackTitle')
-      track.album = Nuvola.queryText('.trackView .albumTitle span[itemprop=name]')
-      track.artist = Nuvola.queryText('.trackView span[itemprop=byArtist]')
+      track.album = Nuvola.queryText('.trackView .albumTitle span.fromAlbum')
+      track.artist = Nuvola.queryText('.trackView #name-section h3.albumTitle > span:last-child')
       track.artLocation = (Nuvola.queryAttribute('.trackView img.popupImage', 'src') ||
         Nuvola.queryAttribute('a.popupImage img', 'src'))
       state = albumViewState

@@ -1,6 +1,8 @@
 Changelog
 =========
 
+  * Fix metadata parsing on album and track views. Issue: tiliado/nuvolaplayer#689
+
 2.3 - June 1st, 2018
 --------------------
 
